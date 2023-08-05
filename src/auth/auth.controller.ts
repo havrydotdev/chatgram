@@ -6,6 +6,8 @@ import {
   HttpStatus,
   Post,
   Request,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from 'src/decorators/public.decorator';
@@ -19,6 +21,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
+  @UsePipes(ValidationPipe)
   async signIn(@Body() input: LoginUserDto): Promise<{
     access_token: string;
   }> {
@@ -28,6 +31,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('sign-up')
+  @UsePipes(ValidationPipe)
   async signUp(@Body() input: CreateUserDto): Promise<{
     user_id: number;
   }> {
