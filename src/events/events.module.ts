@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { EventsGateway } from './gateway/events.gateway';
 import { EventsService } from './service/events/events.service';
+import { EventsGateway } from './gateway/events/events.gateway';
 
 @Module({
   providers: [EventsGateway, EventsService],
