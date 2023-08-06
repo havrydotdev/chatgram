@@ -1,12 +1,14 @@
 version: '3.8'
 
 services:
-  chatgram:
+  nestjs:
     restart: always
     build:
       context: ./
     depends_on:
       - pg
+    environment:
+      - POSTGRES_HOST=pg
 
   pg:
     restart: always

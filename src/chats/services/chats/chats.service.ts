@@ -21,6 +21,10 @@ export class ChatsService {
           created_at: 'ASC',
         },
       },
+      relations: {
+        users: true,
+        messages: true,
+      },
     });
   }
 
