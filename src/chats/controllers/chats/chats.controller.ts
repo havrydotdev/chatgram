@@ -51,7 +51,10 @@ export class ChatsController {
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) chatId: number): Promise<void> {
-    return this.chatsService.delete(chatId);
+  async delete(
+    @Request() req,
+    @Param('id', ParseIntPipe) chatId: number,
+  ): Promise<void> {
+    return this.chatsService.delete(req.user.id, chatId);
   }
 }

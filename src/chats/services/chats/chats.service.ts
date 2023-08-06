@@ -50,15 +50,26 @@ export class ChatsService {
       throw new UnauthorizedException();
     }
 
-    const res = await this.chatsRepo.save({
+    return await this.chatsRepo.save({
       id: id,
       ...dto,
     });
-
-    return res;
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(userId: number, id: number): Promise<void> {
+    const chats = await this.chatsRepo.find({
+      where: {
+        id: id,
+      },
+      relations: {
+        users: true,
+      },
+    });
+
+    if (chats[0].users.filter((user) => user.id === userId).length !== 1) {
+      throw new UnauthorizedException();
+    }
+
     await this.chatsRepo.delete({
       id: id,
     });

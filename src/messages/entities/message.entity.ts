@@ -3,8 +3,8 @@ import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -24,6 +24,7 @@ export class Message {
   })
   chat: Chat;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
+  @JoinColumn()
   user: User;
 }
