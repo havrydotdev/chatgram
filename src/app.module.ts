@@ -6,8 +6,9 @@ import { Message } from './messages/entities/message.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ChatsModule } from './chats/chats.module';
-import { MessagesService } from './messages/services/messages/messages.service';
-import { MessagesController } from './messages/controllers/messages/messages.controller';
+import { EventsModule } from './events/events.module';
+import { MessagesModule } from './messages/messages.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -24,8 +25,11 @@ import { MessagesController } from './messages/controllers/messages/messages.con
     }),
     AuthModule,
     ChatsModule,
+    EventsModule,
+    MessagesModule,
+    UsersModule,
   ],
-  providers: [MessagesService],
-  controllers: [MessagesController],
+  providers: [],
+  controllers: [],
 })
 export class AppModule {}
