@@ -5,7 +5,6 @@ import { Chat } from './chats/entities/chat.entity';
 import { Message } from './messages/entities/message.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { ChatsService } from './chats/services/chats/chats.service';
 import { ChatsModule } from './chats/chats.module';
 
 @Module({
@@ -24,6 +23,6 @@ import { ChatsModule } from './chats/chats.module';
     AuthModule,
     ChatsModule,
   ],
-  providers: [ChatsService],
+  providers: [],
 })
 export class AppModule {}

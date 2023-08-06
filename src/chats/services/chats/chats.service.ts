@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateChatDto } from 'src/chats/dto/create-chat.dto';
 import { UpdateChatDto } from 'src/chats/dto/update-chat.dto';
@@ -24,15 +24,35 @@ export class ChatsService {
     });
   }
 
-  async create(chat: CreateChatDto): Promise<number> {
-    const res = await this.chatsRepo.insert(chat);
-    return res.identifiers[0].id;
+  async create(userId: number, chat: CreateChatDto): Promise<number> {
+    const res = await this.chatsRepo.save({
+      users: [
+        {
+          id: userId,
+        },
+      ],
+      ...chat,
+    });
+    return res.id;
   }
 
-  async update(id: number, chat: UpdateChatDto): Promise<Chat> {
+  async update(userId: number, id: number, dto: UpdateChatDto): Promise<Chat> {
+    const chats = await this.chatsRepo.find({
+      where: {
+        id: id,
+      },
+      relations: {
+        users: true,
+      },
+    });
+
+    if (chats[0].users.filter((user) => user.id === userId).length !== 1) {
+      throw new UnauthorizedException();
+    }
+
     const res = await this.chatsRepo.save({
       id: id,
-      ...chat,
+      ...dto,
     });
 
     return res;
