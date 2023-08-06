@@ -28,32 +28,25 @@ export class MessagesService {
     });
   }
 
-  async create(
-    chatId: number,
-    userId: number,
-    dto: CreateMessageDto,
-  ): Promise<number> {
+  async create(userId: number, dto: CreateMessageDto): Promise<number> {
     const res = await this.msgsRepo.save({
       chat: {
-        id: chatId,
+        id: dto.chatId,
       },
       user: {
         id: userId,
       },
+      created_at: Date.now(),
       ...dto,
     });
     return res.id;
   }
 
-  async update(
-    userId: number,
-    messageId: number,
-    dto: UpdateMessageDto,
-  ): Promise<Message> {
-    this.checkMessage(messageId, userId);
+  async update(userId: number, dto: UpdateMessageDto): Promise<Message> {
+    this.checkMessage(dto.id, userId);
 
     return await this.msgsRepo.save({
-      id: messageId,
+      id: dto.id,
       ...dto,
     });
   }
@@ -66,7 +59,7 @@ export class MessagesService {
     });
   }
 
-  async checkMessage(messageId: number, userId: number) {
+  private async checkMessage(messageId: number, userId: number) {
     const messages = await this.msgsRepo.find({
       where: {
         id: messageId,
