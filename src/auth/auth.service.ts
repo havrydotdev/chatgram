@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
@@ -18,6 +23,13 @@ export class AuthService {
     access_token: string;
   }> {
     const user = await this.usersService.findOneByEmail(email);
+    if (!user) {
+      throw new HttpException(
+        'User with this email does not exist',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (!comparePasswords(password, user.password)) {
       throw new UnauthorizedException();
     }

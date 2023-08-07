@@ -13,7 +13,7 @@ export class UsersService {
     return result.identifiers[0].id;
   }
 
-  findOneByEmail(email: string): Promise<User> {
+  findOneByEmail(email: string): Promise<User | null> {
     return this.usersRepo.findOneBy({
       email: email,
     });
