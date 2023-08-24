@@ -13,19 +13,27 @@ import { AuthService } from './auth.service';
 import { Public } from 'src/decorators/public.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UsersService } from 'src/users/users.service';
+import { comparePasswords } from 'src/utils/bcrypt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   @UsePipes(ValidationPipe)
-  async signIn(@Body() input: LoginUserDto): Promise<{
-    access_token: string;
-  }> {
-    return this.authService.signIn(input.email, input.password);
+  async signIn(@Body() input: LoginUserDto) {
+    const user = await this.usersService.findOneByEmail(input.email);
+    if (comparePasswords(input.password, user.password)) {
+      return this.authService.signIn(user.email, user.password);
+    }
+
+    return null;
   }
 
   @Public()
