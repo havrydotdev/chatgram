@@ -24,7 +24,7 @@ export class AuthService {
     email: string;
     name: string;
     id: number;
-    access_token: string;
+    jwt_token: string;
   }> {
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {
@@ -46,7 +46,7 @@ export class AuthService {
     };
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      jwt_token: await this.jwtService.signAsync(payload),
       ...payload,
     };
   }

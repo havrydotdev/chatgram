@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -29,11 +30,13 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   async signIn(@Body() input: LoginUserDto) {
     const user = await this.usersService.findOneByEmail(input.email);
-    if (comparePasswords(input.password, user.password)) {
-      return this.authService.signIn(user.email, user.password);
+    if (!user) {
+      throw new BadRequestException({
+        error: 'user does not exist',
+      });
     }
 
-    return null;
+    return this.authService.signIn(user.email, input.password);
   }
 
   @Public()
