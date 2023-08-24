@@ -36,3 +36,6 @@ lerna-debug.log*
 
 # dockerfile database
 /database
+
+# environment variables
+.env

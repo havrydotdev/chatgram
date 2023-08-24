@@ -17,13 +17,14 @@ import { CreateChatDto } from 'src/chats/dto/create-chat.dto';
 import { UpdateChatDto } from 'src/chats/dto/update-chat.dto';
 import { Chat } from 'src/chats/entities/chat.entity';
 import { ChatsService } from 'src/chats/services/chats/chats.service';
+import { Request as ExpressRequest } from 'express';
 
 @Controller('chats')
 export class ChatsController {
   constructor(private chatsService: ChatsService) {}
 
   @Get()
-  getAllByUser(@Request() req): Promise<Chat[]> {
+  getAllByUser(@Request() req: ExpressRequest): Promise<Chat[]> {
     return this.chatsService.getAllByUser(req.user.id);
   }
 
@@ -31,7 +32,7 @@ export class ChatsController {
   @UsePipes(ValidationPipe)
   @HttpCode(HttpStatus.OK)
   async create(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Body() chat: CreateChatDto,
   ): Promise<{
     id: number;
@@ -43,7 +44,7 @@ export class ChatsController {
   @Patch(':id')
   @UsePipes(ValidationPipe)
   async update(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Param('id', ParseIntPipe) chatId: number,
     @Body() chat: UpdateChatDto,
   ): Promise<Chat> {
@@ -52,7 +53,7 @@ export class ChatsController {
 
   @Delete(':id')
   async delete(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Param('id', ParseIntPipe) chatId: number,
   ): Promise<void> {
     return this.chatsService.delete(req.user.id, chatId);

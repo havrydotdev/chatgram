@@ -15,7 +15,7 @@ import { Public } from 'src/decorators/public.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
-import { comparePasswords } from 'src/utils/bcrypt';
+import { Request as ExpressRequest } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -50,7 +50,7 @@ export class AuthController {
   }
 
   @Get()
-  getProfile(@Request() req) {
+  getProfile(@Request() req: ExpressRequest) {
     return req.user;
   }
 }

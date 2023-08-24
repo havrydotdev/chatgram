@@ -23,6 +23,7 @@ import { UsersModule } from './users/users.module';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
       entities: [User, Chat, Message],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     AuthModule,
