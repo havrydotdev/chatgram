@@ -9,8 +9,8 @@ import { Repository } from 'typeorm';
 export class ChatsService {
   constructor(@InjectRepository(Chat) private chatsRepo: Repository<Chat>) {}
 
-  getAllByUser(userId: number): Promise<Chat[]> {
-    return this.chatsRepo.find({
+  async getAllByUser(userId: number): Promise<Chat[]> {
+    const chats = await this.chatsRepo.find({
       where: {
         users: {
           id: userId,
@@ -18,14 +18,28 @@ export class ChatsService {
       },
       order: {
         messages: {
-          created_at: 'ASC',
+          created_at: 'DESC',
         },
       },
       relations: {
-        users: true,
-        messages: true,
+        users: {
+          avatar: true,
+        },
+        avatar: true,
+        messages: false,
       },
     });
+
+    for (const chat of chats) {
+      if (!chat.avatar) {
+        chat.avatar = {
+          url: chat.users.at(-1).avatar.url,
+          key: chat.name,
+        };
+      }
+    }
+
+    return chats;
   }
 
   async create(userId: number, chat: CreateChatDto): Promise<number> {
